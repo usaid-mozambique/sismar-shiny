@@ -3056,7 +3056,41 @@
       }
     },
     "sismar": {
-  "Source": "local"
+      "Source": "github",
+      " Repository": null,
+      "description": {
+        "Package": "sismar",
+        "Title": "Arrumar dados SISMA",
+        "Version": "1.1.0",
+        "Authors@R": "c(\n    person(\"Joe\", \"Lara\", email = \"jlara@usaid.gov\", role = c(\"aut\", \"cre\")),\n    person(\"Emilton\", \"Cumbana\", email = \"e.cumbana@outlook.com\", role = (\"aut\")),\n    person(\"Karishma\", \"Srikanth\", email = \"ksrikanth@usaid.gov\", role = c(\"aut\")),\n    person(\"Kirstin\", \"Lyon\", email = \"kirstin.c.lyon@gmail.com\", role = c(\"aut\")))",
+        "Description": "Fornece um conjunto de funções para a criação de conjuntos de dados analíticos \n    a partir de downloads do SISMA e DISA. Inclui funções que arrumam os ficheiros para um \n    formato longo, removem variáveis desnecessárias, e criam colunas úteis para a análise.",
+        "License": "MIT + file LICENSE",
+        "Encoding": "UTF-8",
+        "LazyData": "true",
+        "Roxygen": "list(markdown = TRUE)",
+        "RoxygenNote": "7.3.2",
+        "BugReports": "https://github.com/usaid-mozambique/sismar/issues",
+        "Imports": "dplyr, magrittr, googlesheets4, tidyselect, tidyr, readr,\nreadxl, stringr, purrr, tibble, janitor, lubridate, lifecycle,\ncrayon, cli, usethis",
+        "Depends": "R (>= 3.5)",
+        "Suggests": "knitr, rmarkdown, glue",
+        "Remotes": "usaid-mozambique/mozR",
+        "VignetteBuilder": "knitr",
+        "URL": "https://usaid-mozambique.github.io/sismar/",
+        "RemoteType": "github",
+        "RemoteHost": "api.github.com",
+        "RemoteRepo": "sismar",
+        "RemoteUsername": "usaid-mozambique",
+        "RemoteRef": "HEAD",
+        "RemoteSha": "b7ad83c07f15755c340e66087dc3fb9368d1b3fa",
+        "GithubRepo": "sismar",
+        "GithubUsername": "usaid-mozambique",
+        "GithubRef": "HEAD",
+        "GithubSHA1": "b7ad83c07f15755c340e66087dc3fb9368d1b3fa",
+        "NeedsCompilation": "no",
+        "Packaged": "2025-03-07 16:57:46 UTC; josephlara",
+        "Author": "Joe Lara [aut, cre],\n  Emilton Cumbana [aut],\n  Karishma Srikanth [aut],\n  Kirstin Lyon [aut]",
+        "Maintainer": "Joe Lara <jlara@usaid.gov>",
+        "Built": "R 4.4.2; ; 2025-03-07 16:57:47 UTC; unix"
       }
     },
     "snakecase": {
