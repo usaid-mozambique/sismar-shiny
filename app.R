@@ -121,8 +121,25 @@ ui <- fluidPage(
         width: 95vw;
       }
 
+.intro-text a {
+  color: #306cc9 !important; /* Change to your desired color */
+  text-decoration: none; /* Remove underline */
+}
+
+/* Change link color on hover */
+.intro-text a:hover {
+  color: #306cc9 !important; /* Darker color when hovering */
+  text-decoration: underline; /* Add underline on hover */
+}
+
       .shiny-file-input-progress {
         height: 10px !important;
+      }
+
+      .shiny-input-container > label {
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 14px !important;
+        color: #333 !important;
       }
 
       /* Change the progress bar color */
@@ -186,8 +203,10 @@ ui <- fluidPage(
              fluidRow(
                column(6,
                       p("Arrumação de dados SISMA", class = "intro-heading"),
-                      p("Utilize os controlos abaixo para carregar o seu relatório padrão .csv do SIMSA, para processar num formato mais amigável para analisar, e para descarregar o seu ficheiro final.", class = "intro-text")
-               )
+                      p("Utilize os controlos abaixo para 1) carregar o seu relatório padrão do SIMSA; 2) processar num formato amigável de análise; e 3) descarregar o ficheiro processado ao seu disco local. Para mais informações sobre a extração de ficheiros SISMA compatíveis com este aplicativo, consulte o ",
+                        a("artigo de ajuda", href = "https://usaid-mozambique.github.io/sismar/articles/export-sisma.html", target = "_blank"),
+                        " do pacote.", class = "intro-text")
+                      )
              ),
              fluidRow(
                column(6,
