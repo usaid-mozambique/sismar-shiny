@@ -193,20 +193,27 @@ ui <- fluidPage(
       )
   ),
 
-  # Secondary banner
-  div(class = "sub-banner", span("")),
-
-  # Tabset Panel
   tabsetPanel(
+    # INFORMAÇÃO TAB
+    tabPanel("Informação",
+             fluidRow(
+               column(6,
+                      p("Resumo", class = "intro-heading"),
+                      p("Uma análise eficiente dos dados exportados dos sistemas de informação do Ministério da Saúde normalmente requer acções de processamento como a pivotagem, a eliminação/combinação de variáveis e a engenharia de dimensões úteis para análise. O pacote “sismar” do R foi desenvolvido para ajudar os utilizadores a automatizar essas acções de transformação, facilitando assim a sua capacidade de dedicar tempo à exploração e análise de dados, em vez de se dedicar a processos morosos de gestão de dados.  Este portal por sua vez fornece uma interface visual para aceder às ferramentas 'sismar'.", br(),br(), 
+                        "test text", class = "intro-text")
+               )
+             )
+    ),
+    
     # ARRUMAÇÃO TAB
     tabPanel("Arrumação",
              fluidRow(
                column(6,
                       p("Arrumação de dados SISMA", class = "intro-heading"),
-                      p("Utilize os controlos abaixo para 1) carregar o seu relatório padrão do SIMSA; 2) processar num formato amigável de análise; e 3) descarregar o ficheiro processado ao seu disco local. Para mais informações sobre a extração de ficheiros SISMA compatíveis com este aplicativo, consulte o ",
+                      p("Utilize os controlos abaixo para 1) carregar o seu relatório padrão do SIMSA; 2) processar o mesmo num formato amigável para análise; e 3) descarregar o ficheiro processado ao seu disco local. Para mais informações sobre a extração de ficheiros SISMA compatíveis com este aplicativo, consulte este ",
                         a("artigo de ajuda", href = "https://usaid-mozambique.github.io/sismar/articles/export-sisma.html", target = "_blank"),
-                        " do pacote.", class = "intro-text")
-                      )
+                        ".", class = "intro-text")
+               )
              ),
              fluidRow(
                column(6,
@@ -225,13 +232,13 @@ ui <- fluidPage(
                )
              )
     ),
-
+    
     # COMPILAÇÃO TAB (Multi-file processing)
     tabPanel("Compilação",
              fluidRow(
                column(6,
                       p("Compilação de ficheiros processados", class = "intro-heading"),
-                      p("Selecione abaixo múltiplos ficheiros .csv para a compilação deles. Estes ficheiros devem já estar processados através da folha 'arrumação'.", class = "intro-text")
+                      p("Selecione abaixo múltiplos ficheiros já processados para a compilação deles.", class = "intro-text")
                )
              ),
              fluidRow(
@@ -251,7 +258,7 @@ ui <- fluidPage(
                )
              )
     ),
-
+    
     # METADADOS TAB
     tabPanel("Metadados",
              fluidRow(
@@ -277,19 +284,12 @@ server <- function(input, output, session) {
     req(input$csv_file)
     processed <- process_sisma_export(input$csv_file$datapath)
     processed_data(processed)
-    
-    # Show preview container when data is available
     show("preview-container")
   })
   
   output$preview <- renderDataTable({
     req(processed_data())
-    datatable(
-      processed_data(),
-      options = list(
-        dom = '<"top-container"l f>rtip'
-      )
-    )
+    datatable(processed_data(), options = list(dom = '<"top-container"l f>rtip'))
   })
   
   output$download <- downloadHandler(
@@ -299,44 +299,7 @@ server <- function(input, output, session) {
       write_csv(processed_data(), file)
     }
   )
-  
-  # COMPILAÇÃO PROCESSING (Multiple file merging)
-  compiled_data <- reactiveVal(NULL)
-  
-  observeEvent(input$process_multi, {
-    req(input$multi_csv_file)
-    
-    # Read and merge files without adding "source_file" column
-    compiled <- map_dfr(input$multi_csv_file$datapath, read_csv) 
-    
-    compiled_data(compiled)  # Save compiled data without "source_file"
-    show("multi-preview-container")
-  })
-  
-  output$multi_preview <- renderDataTable({
-    req(compiled_data())
-    datatable(
-      compiled_data(),
-      options = list(
-        dom = '<"top-container"l f>rtip'
-      )
-    )
-  })
-  
-  output$download_multi <- downloadHandler(
-    filename = function() { "compiled_file.csv" },
-    content = function(file) {
-      req(compiled_data())
-      write_csv(compiled_data(), file)
-    }
-  )
-  
-  # Toggle menu visibility when clicking the menu button
-  observeEvent(input$menu_button, {
-    session$sendCustomMessage("toggleMenu", "menu_dropdown")
-  })
 }
 
-
-
+# Run the application
 shinyApp(ui = ui, server = server)
