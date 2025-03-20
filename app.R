@@ -216,7 +216,11 @@ ui <- fluidPage(
              fluidRow(
                column(6,
                       p("Documentação Completa do 'sismar'", class = "intro-heading"),
-                      p("A documentação completa sobre o “sismar”, incluindo o código-fonte do pacote, pode ser encontrada no Github.  Além disso, é possível aceder a artigos de ajuda que demonstram casos de utilização do pacote (por exemplo, como gerar e descarregar ficheiros de exportação SISMA compatíveis) através da página de documentação de referência do pacote em linha.", class = "intro-text")
+                      p("A documentação completa sobre o “sismar”, incluindo o código-fonte do pacote, pode ser encontrada no ",
+                        a("Github", href = "https://github.com/usaid-mozambique/sismar", target = "_blank"),
+                        ". Além disso, é possível aceder a artigos de ajuda que demonstram casos de utilização do pacote (por exemplo, como gerar e descarregar ficheiros de exportação SISMA compatíveis) através da página de ",
+                        a("documentação", href = "https://usaid-mozambique.github.io/sismar/index.html", target = "_blank"),
+                        "de referência do pacote em linha.", class = "intro-text"),
                )
              ),
     ),
