@@ -111,26 +111,26 @@ ui <- fluidPage(
       }
 
       .intro-heading {
-        font-size: 14px;
+        font-size: 15px;
         font-weight: bold;
       }
 
       .intro-text {
         padding-right: 50px !important;
-        font-size: 12px;
+        font-size: 14px;
         width: 95vw;
       }
 
-.intro-text a {
-  color: #306cc9 !important; /* Change to your desired color */
-  text-decoration: none; /* Remove underline */
-}
-
-/* Change link color on hover */
-.intro-text a:hover {
-  color: #306cc9 !important; /* Darker color when hovering */
-  text-decoration: underline; /* Add underline on hover */
-}
+      .intro-text a {
+        color: #306cc9 !important; /* Change to your desired color */
+        text-decoration: none; /* Remove underline */
+      }
+      
+      /* Change link color on hover */
+      .intro-text a:hover {
+        color: #306cc9 !important; /* Darker color when hovering */
+        text-decoration: underline; /* Add underline on hover */
+      }
 
       .shiny-file-input-progress {
         height: 10px !important;
@@ -198,18 +198,34 @@ ui <- fluidPage(
     tabPanel("Informação",
              fluidRow(
                column(6,
-                      p("Resumo", class = "intro-heading"),
-                      p("Uma análise eficiente dos dados exportados dos sistemas de informação do Ministério da Saúde normalmente requer acções de processamento como a pivotagem, a eliminação/combinação de variáveis e a engenharia de dimensões úteis para análise. O pacote “sismar” do R foi desenvolvido para ajudar os utilizadores a automatizar essas acções de transformação, facilitando assim a sua capacidade de dedicar tempo à exploração e análise de dados, em vez de se dedicar a processos morosos de gestão de dados.  Este portal por sua vez fornece uma interface visual para aceder às ferramentas 'sismar'.", br(),br(), 
-                        "test text", class = "intro-text")
+                      p("Automatização com o 'sismar'", class = "intro-heading"),
+                      p("Análise eficiente de dados exportados dos sistemas de informação do Ministério da Saúde (MISAU) normalmente requer acções de processamento como a pivotagem, a eliminação/combinação de variáveis e a engenharia de dimensões úteis para análise. O pacote 'sismar' (desenvolvido na linguagem R de programação) automatiza essas acções de transformação, facilitando assim a exploração e análise de dados.  Este portal web fornece uma interface visual para aceder às ferramentas do 'sismar' e transformar ficheiros providenciados pelo utilizador.", class = "intro-text"),
+                      
+                      p("Complementaridade ao SISMA", class = "intro-heading"), 
+                      p("O pacote “sismar” foi desenvolvido como ferramenta complementar destinada a funcionar no âmbito mais alargado dos sistemas de informação do MISAU. A sua existência confere mais valor aos sistemas de base como o SISMA, fornecendo ferramentas que permitem uma análise mais fácil das estatísticas geradas por esses sistemas. O diagrama abaixo ilustra a relação entre o SISMA e a funcionalidade do pacote 'sismar'.", class = "intro-text")
                )
-             )
+             ),
+             # Separate row for the image
+             fluidRow(
+               column(12, 
+                      div(style = "text-align: center; margin-top: 20px; margin-bottom: 20px;",
+                          img(src = "diagrama_dados.png", width = "650px", height = "199px")
+                      )
+               )
+             ),
+             fluidRow(
+               column(6,
+                      p("Documentação Completa do 'sismar'", class = "intro-heading"),
+                      p("A documentação completa sobre o “sismar”, incluindo o código-fonte do pacote, pode ser encontrada no Github.  Além disso, é possível aceder a artigos de ajuda que demonstram casos de utilização do pacote (por exemplo, como gerar e descarregar ficheiros de exportação SISMA compatíveis) através da página de documentação de referência do pacote em linha.", class = "intro-text")
+               )
+             ),
     ),
     
     # ARRUMAÇÃO TAB
     tabPanel("Arrumação",
              fluidRow(
                column(6,
-                      p("Arrumação de dados SISMA", class = "intro-heading"),
+                      p("Arrumação de Exportações SISMA", class = "intro-heading"),
                       p("Utilize os controlos abaixo para 1) carregar o seu relatório padrão do SIMSA; 2) processar o mesmo num formato amigável para análise; e 3) descarregar o ficheiro processado ao seu disco local. Para mais informações sobre a extração de ficheiros SISMA compatíveis com este aplicativo, consulte este ",
                         a("artigo de ajuda", href = "https://usaid-mozambique.github.io/sismar/articles/export-sisma.html", target = "_blank"),
                         ".", class = "intro-text")
@@ -237,7 +253,7 @@ ui <- fluidPage(
     tabPanel("Compilação",
              fluidRow(
                column(6,
-                      p("Compilação de ficheiros processados", class = "intro-heading"),
+                      p("Compilação de Ficheiros Processados", class = "intro-heading"),
                       p("Selecione abaixo múltiplos ficheiros já processados para a compilação deles.", class = "intro-text")
                )
              ),
