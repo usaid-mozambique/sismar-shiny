@@ -15,7 +15,6 @@ ui <- fluidPage(
   tags$head(
     # Load Google Fonts
     tags$link(href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:wght@300;400;700&display=swap", rel="stylesheet"),
-    
     tags$style(HTML("
       body {
         font-family: 'Montserrat', sans-serif;
@@ -214,7 +213,13 @@ ui <- fluidPage(
         height: 20px !important;
         line-height: 1 !important;
       }
-    "))
+    ")),
+    
+    tags$link(
+      rel = "stylesheet",
+      href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    )
+    
   ),
   
   div(class = "banner",
@@ -271,6 +276,7 @@ ui <- fluidPage(
                                class = "intro-text")
                          ),
                          div(style = "margin-top: 25px;",
+                             id = "csv_file_wrapper",
                              fileInput("csv_file", "Escolha ficheiro .csv", accept = ".csv")
                          ),
                          div(class = "btn-container",
@@ -289,7 +295,9 @@ ui <- fluidPage(
                              p("As vezes, é útil compilar ficheiros processados para vários programas (por exemplo, TARV, ANC e CCR) ou períodos (por exemplo, anos 2023, 2024 e 2025).  Selecione vários ficheiros processados com os controlos abaixo. Note que, usando o botão “Procurar”, pode-se selecionar vários ficheiros .csv ou .txt.", class = "intro-text")
                          ),
                          div(style = "margin-top: 25px;",
-                             fileInput("multi_csv_file", "Escolha ficheiros .csv ou .txt", accept = c(".csv", ".txt"), multiple = TRUE)
+                             id = "multi_csv_file_wrapper",
+                             fileInput("multi_csv_file", "Escolha ficheiros .csv ou .txt", accept = c(".csv", ".txt"), multiple = TRUE),
+                             uiOutput("multi_filenames")
                          ),
                          div(class = "btn-container",
                              actionButton("process_multi", "Compilar", class = "btn btn-primary"),
@@ -302,9 +310,13 @@ ui <- fluidPage(
                  div(id = "preview-wrapper",
                      style = "display: none; margin-top: 25px;",
                      
+                     # Dynamic filename display (same style for both types)
+                     uiOutput("preview_header"),  # ✅ Add this new UI output
+                     
                      div(id = "preview-container", dataTableOutput("preview")),
                      div(id = "multi-preview-container", dataTableOutput("multi_preview"))
                  )
+                 
              )
     ),
     
@@ -324,19 +336,26 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   options(shiny.maxRequestSize = 100*1024^2)
   
+  last_used <- reactiveVal(NULL)
+  
   # Reactive for single-file processing
   processed_data <- reactiveVal(NULL)
   
   observeEvent(input$process, {
     req(input$csv_file)
-    
     processed <- process_sisma_export(input$csv_file$datapath)
     processed_data(processed)
     
-    hide("multi-preview-container")    # Hide the other table
-    show("preview-wrapper")            # Show the full-width preview container
-    show("preview-container")          # Show the Arrumação preview
+    shinyjs::reset("multi_csv_file_wrapper")  # ✅ Clear the multi-file input
+    
+    hide("multi-preview-container")
+    show("preview-wrapper")
+    show("preview-container")
+    
+    last_used("arrumacao")
+    
   })
+  
   
   output$preview <- renderDataTable({
     req(processed_data())
@@ -357,6 +376,8 @@ server <- function(input, output, session) {
   observeEvent(input$process_multi, {
     req(input$multi_csv_file)
     
+    shinyjs::reset("csv_file_wrapper")  # ✅ Clear the single-file input
+    
     files <- input$multi_csv_file
     
     tryCatch({
@@ -369,6 +390,8 @@ server <- function(input, output, session) {
       }) %>% bind_rows()
       
       multi_processed_data(all_data)
+      
+      last_used("compilacao")  # ✅ Track that this was the last action
       
       hide("preview-container")            # Hide the Arrumação table
       show("preview-wrapper")              # Show full-width preview container
@@ -383,6 +406,7 @@ server <- function(input, output, session) {
     })
   })
   
+  
   output$multi_preview <- renderDataTable({
     req(multi_processed_data())
     datatable(multi_processed_data(), options = list(dom = '<"top-container"l f>rtip'))
@@ -395,7 +419,27 @@ server <- function(input, output, session) {
       write_csv(multi_processed_data(), file)
     }
   )
+  
+  output$preview_header <- renderUI({
+    if (last_used() == "arrumacao" && !is.null(input$csv_file)) {
+      tags$p(
+        class = "intro-text",
+        tags$strong(HTML("<i class='fa fa-broom'></i> Ficheiro processado: ")),
+        input$csv_file$name
+      )
+    } else if (last_used() == "compilacao" && !is.null(input$multi_csv_file)) {
+      tags$p(
+        class = "intro-text",
+        tags$strong(HTML("<i class='fa fa-layer-group'></i> Ficheiros compilados: ")),
+        paste(input$multi_csv_file$name, collapse = ", ")
+      )
+    }
+  })
+  
+  
+  
 }
+
 
 
 shinyApp(ui = ui, server = server)
