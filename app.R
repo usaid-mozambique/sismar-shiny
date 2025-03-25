@@ -201,6 +201,14 @@ ui <- fluidPage(
         background-color: white !important;
       }
       
+      .custom-top-controls {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      
       #preview-wrapper {
         padding: 10px;
         background-color: #ffffff;
@@ -359,7 +367,12 @@ server <- function(input, output, session) {
   
   output$preview <- renderDataTable({
     req(processed_data())
-    datatable(processed_data(), options = list(dom = '<"top-container"l f>rtip'))
+    datatable(
+      processed_data(),
+      options = list(
+        dom = '<"custom-top-controls"lf>rtip'
+      )
+    )
   })
   
   output$download <- downloadHandler(
@@ -409,7 +422,12 @@ server <- function(input, output, session) {
   
   output$multi_preview <- renderDataTable({
     req(multi_processed_data())
-    datatable(multi_processed_data(), options = list(dom = '<"top-container"l f>rtip'))
+    datatable(
+      multi_processed_data(),
+      options = list(
+        dom = '<"custom-top-controls"lf>rtip'
+      )
+    )
   })
   
   output$download_multi <- downloadHandler(
