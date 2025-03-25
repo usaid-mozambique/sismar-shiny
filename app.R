@@ -8,29 +8,33 @@ library(DT)
 
 # Define UI for application
 ui <- fluidPage(
-
+  
   useShinyjs(),
   theme = shinytheme("flatly"),
-
+  
   tags$head(
     # Load Google Fonts
     tags$link(href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:wght@300;400;700&display=swap", rel="stylesheet"),
-
+    
     tags$style(HTML("
-      /* Apply Montserrat as the base font */
       body {
         font-family: 'Montserrat', sans-serif;
         padding-top: 110px;
         margin-left: 15px;
         margin-right: 15px;
+        @media (max-width: 991px) {
+        .no-stack > .col-sm-6 {
+          float: left;
+          width: 50%;
+        }
+        }
+      
       }
 
-      /* Apply Lato for headings */
       h1, h2, h3, h4, h5, h6, .intro-heading {
         font-family: 'Lato', sans-serif;
       }
 
-      /* Full-width fixed banner */
       .banner {
         display: flex;
         align-items: center;
@@ -48,7 +52,6 @@ ui <- fluidPage(
         z-index: 1000;
       }
 
-      /* Center logo and text together */
       .banner-text {
         display: flex;
         align-items: center;
@@ -56,13 +59,11 @@ ui <- fluidPage(
         font-size: 47px;
       }
 
-      /* Adjust logo size and vertical alignment */
       .banner-logo {
         height: 60px;
         vertical-align: middle;
       }
 
-      /* Secondary banner below the main banner */
       .sub-banner {
         display: flex;
         align-items: center;
@@ -70,7 +71,7 @@ ui <- fluidPage(
         background-color: #d5d417;
         color: white;
         font-size: 18px;
-        height: 3px;
+        height: 2px;
         width: 100vw;
         position: fixed;
         top: 70px;
@@ -78,7 +79,6 @@ ui <- fluidPage(
         z-index: 999;
       }
 
-      /* Default (Inactive) Tab Styling */
       .nav-tabs > li > a {
         font-size: 13px !important;
         color: #95a5a6 !important;
@@ -88,7 +88,6 @@ ui <- fluidPage(
         border-bottom: 1px solid #d9dddc !important;
       }
 
-      /* Active (Selected) Tab Styling */
       .nav-tabs > li.active > a,
       .nav-tabs > li.active > a:hover {
         color: #333333 !important;
@@ -98,16 +97,37 @@ ui <- fluidPage(
         border-bottom: none !important;
       }
 
-      /* Hover Effect */
       .nav-tabs > li > a:hover {
         color: #005a50 !important;
       }
 
-      /* Add margin space (indentation) to tabset content */
       .tab-content {
         margin-top: 25px !important;
         padding-left: 10px !important;
         padding-right: 10px !important;
+      }
+      
+      .side-by-side-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 40px;
+        margin-top: 10px;
+      }
+      
+      .left-panel, .right-panel {
+        flex: 1;
+        min-width: 400;
+        padding: 10px;
+        background-color: white;
+        min-height: 400px; /* Ensures divider has height */
+      }
+      
+      .divider {
+        width: 1px;
+        background-color: #d9dddc;
+        align-self: stretch;
+        flex-shrink: 0;
       }
 
       .intro-heading {
@@ -115,21 +135,27 @@ ui <- fluidPage(
         font-weight: bold;
       }
 
+      /* Default for all intro-text */
       .intro-text {
-        padding-right: 50px !important;
         font-size: 14px;
-        width: 95vw;
+      }
+
+      /* Scoped fix for Processamento tab only */
+      #processamento-panel .intro-text {
+        padding-right: 10px !important;
+        width: 100%;
+        overflow-x: auto;
+        box-sizing: border-box;
       }
 
       .intro-text a {
-        color: #306cc9 !important; /* Change to your desired color */
-        text-decoration: none; /* Remove underline */
+        color: #306cc9 !important;
+        text-decoration: none;
       }
-      
-      /* Change link color on hover */
+
       .intro-text a:hover {
-        color: #306cc9 !important; /* Darker color when hovering */
-        text-decoration: underline; /* Add underline on hover */
+        color: #306cc9 !important;
+        text-decoration: underline;
       }
 
       .shiny-file-input-progress {
@@ -142,7 +168,6 @@ ui <- fluidPage(
         color: #333 !important;
       }
 
-      /* Change the progress bar color */
       .shiny-file-input-progress .progress-bar {
         height: 10;
         background-color: #007268 !important;
@@ -176,28 +201,35 @@ ui <- fluidPage(
       .dataTable {
         background-color: white !important;
       }
+      
+      #preview-wrapper {
+        padding: 10px;
+        background-color: #ffffff;
+        border-top: 1px solid #d9dddc; /* Thin gray separator line */
+        margin-top: 30px;
+      }
 
-      /* Adjust table row height (thickness) */
+
       .dataTable tbody tr {
         height: 20px !important;
         line-height: 1 !important;
       }
     "))
   ),
-
-  # Full-width fixed banner with logo + text + menu
+  
   div(class = "banner",
       div(class = "banner-text",
           img(src = "apple-touch-icon-180x180.png", class = "banner-logo"),
           span("sismar::")
       )
   ),
-
+  
+  div(class = "sub-banner"),
+  
   tabsetPanel(
-    # INFORMAÇÃO TAB
     tabPanel("Informação",
              fluidRow(
-               column(6,
+               column(12,
                       p("Automatização com o 'sismar'", class = "intro-heading"),
                       p("Análise eficiente de dados exportados dos sistemas de informação do Ministério da Saúde (MISAU) normalmente requer acções de processamento como a pivotagem, a eliminação/combinação de variáveis e a engenharia de dimensões úteis para análise. O pacote 'sismar' (desenvolvido na linguagem R de programação) automatiza essas acções de transformação, facilitando assim a exploração e análise de dados.  Este portal web fornece uma interface visual para aceder às ferramentas do 'sismar' e transformar ficheiros providenciados pelo utilizador.", class = "intro-text"),
                       
@@ -205,7 +237,6 @@ ui <- fluidPage(
                       p("O pacote “sismar” foi desenvolvido como ferramenta complementar destinada a funcionar no âmbito mais alargado dos sistemas de informação do MISAU. A sua existência confere mais valor aos sistemas de base como o SISMA, fornecendo ferramentas que permitem uma análise mais fácil das estatísticas geradas por esses sistemas. O diagrama abaixo ilustra a relação entre o SISMA e a funcionalidade do pacote 'sismar'.", class = "intro-text")
                )
              ),
-             # Separate row for the image
              fluidRow(
                column(12, 
                       div(style = "text-align: center; margin-top: 20px; margin-bottom: 20px;",
@@ -214,7 +245,7 @@ ui <- fluidPage(
                )
              ),
              fluidRow(
-               column(6,
+               column(12,
                       p("Documentação Completa do 'sismar'", class = "intro-heading"),
                       p("A documentação completa sobre o “sismar”, incluindo o código-fonte do pacote, pode ser encontrada no ",
                         a("Github", href = "https://github.com/usaid-mozambique/sismar", target = "_blank"),
@@ -222,64 +253,62 @@ ui <- fluidPage(
                         a("documentação", href = "https://usaid-mozambique.github.io/sismar/index.html", target = "_blank"),
                         "de referência do pacote em linha.", class = "intro-text"),
                )
-             ),
-    ),
-    
-    # ARRUMAÇÃO TAB
-    tabPanel("Arrumação",
-             fluidRow(
-               column(6,
-                      p("Arrumação de Exportações SISMA", class = "intro-heading"),
-                      p("Utilize os controlos abaixo para 1) carregar o seu relatório padrão do SIMSA; 2) processar o mesmo num formato amigável para análise; e 3) descarregar o ficheiro processado ao seu disco local. Para mais informações sobre a extração de ficheiros SISMA compatíveis com este aplicativo, consulte este ",
-                        a("artigo de ajuda", href = "https://usaid-mozambique.github.io/sismar/articles/export-sisma.html", target = "_blank"),
-                        ".", class = "intro-text")
-               )
-             ),
-             fluidRow(
-               column(6,
-                      fileInput("csv_file", "Escolha ficheiro .csv", accept = ".csv"),
-                      div(class = "btn-container",
-                          actionButton("process", "Processar", class = "btn btn-primary"),
-                          downloadButton("download", "Descarregar", class = "btn btn-secondary")
-                      )
-               )
-             ),
-             fluidRow(
-               column(10,
-                      div(id = "preview-container", style = "display: none;",
-                          dataTableOutput("preview")
-                      )
-               )
              )
     ),
     
-    # COMPILAÇÃO TAB (Multi-file processing)
-    tabPanel("Compilação",
-             fluidRow(
-               column(6,
-                      p("Compilação de Ficheiros Processados", class = "intro-heading"),
-                      p("Selecione abaixo múltiplos ficheiros já processados para a compilação deles.", class = "intro-text")
-               )
-             ),
-             fluidRow(
-               column(6,
-                      fileInput("multi_csv_file", "Escolha ficheiros .csv", accept = ".csv", multiple = TRUE),
-                      div(class = "btn-container",
-                          actionButton("process_multi", "Compilar", class = "btn btn-primary"),
-                          downloadButton("download_multi", "Descarregar", class = "btn btn-secondary")
-                      )
-               )
-             ),
-             fluidRow(
-               column(10,
-                      div(id = "multi-preview-container", style = "display: none;",
-                          dataTableOutput("multi_preview")
-                      )
-               )
+    tabPanel("Processamento SISMA",
+             div(id = "processamento-panel",
+                 
+                 # Side-by-side panels
+                 div(class = "side-by-side-wrapper",
+                     
+                     # Left Panel
+                     div(class = "left-panel",
+                         div(style = "padding-top: 15px;",
+                             p(HTML("<i class='fa fa-broom'></i> Arrumação de Exportações SISMA"), class = "intro-heading"),
+                             p("Utilize os controlos abaixo para 1) carregar o seu relatório padrão do SIMSA; 2) processar o mesmo num formato amigável para análise; e 3) descarregar o ficheiro processado ao seu disco local. Para mais informações sobre a extração de ficheiros SISMA compatíveis com este aplicativo, consulte este ",
+                               a("artigo de ajuda.", href = "https://usaid-mozambique.github.io/sismar/articles/export-sisma.html", target = "_blank"),
+                               class = "intro-text")
+                         ),
+                         div(style = "margin-top: 25px;",
+                             fileInput("csv_file", "Escolha ficheiro .csv", accept = ".csv")
+                         ),
+                         div(class = "btn-container",
+                             actionButton("process", "Processar", class = "btn btn-primary"),
+                             downloadButton("download", "Descarregar", class = "btn btn-secondary")
+                         )
+                     ),
+                     
+                     # Divider
+                     div(class = "divider"),
+                     
+                     # Right Panel
+                     div(class = "right-panel",
+                         div(style = "padding-top: 15px;",
+                             p(HTML("<i class='fa fa-layer-group'></i> Compilação de Ficheiros Processados"), class = "intro-heading"),
+                             p("As vezes, é útil compilar ficheiros processados para vários programas (por exemplo, TARV, ANC e CCR) ou períodos (por exemplo, anos 2023, 2024 e 2025).  Selecione vários ficheiros processados com os controlos abaixo. Note que, usando o botão “Procurar”, pode-se selecionar vários ficheiros .csv ou .txt.", class = "intro-text")
+                         ),
+                         div(style = "margin-top: 25px;",
+                             fileInput("multi_csv_file", "Escolha ficheiros .csv ou .txt", accept = c(".csv", ".txt"), multiple = TRUE)
+                         ),
+                         div(class = "btn-container",
+                             actionButton("process_multi", "Compilar", class = "btn btn-primary"),
+                             downloadButton("download_multi", "Descarregar", class = "btn btn-secondary")
+                         )
+                     )
+                 ),
+                 
+                 # ✅ Preview Panel FULL WIDTH - placed OUTSIDE flex wrapper
+                 div(id = "preview-wrapper",
+                     style = "display: none; margin-top: 25px;",
+                     
+                     div(id = "preview-container", dataTableOutput("preview")),
+                     div(id = "multi-preview-container", dataTableOutput("multi_preview"))
+                 )
              )
     ),
     
-    # METADADOS TAB
+    
     tabPanel("Metadados",
              fluidRow(
                column(6,
@@ -291,20 +320,22 @@ ui <- fluidPage(
   )
 )
 
-# Define server logic
+# Server logic
 server <- function(input, output, session) {
-  
-  # Increase max upload size to 100MB (adjust as needed)
   options(shiny.maxRequestSize = 100*1024^2)
   
-  # ARRUMAÇÃO PROCESSING
+  # Reactive for single-file processing
   processed_data <- reactiveVal(NULL)
   
   observeEvent(input$process, {
     req(input$csv_file)
+    
     processed <- process_sisma_export(input$csv_file$datapath)
     processed_data(processed)
-    show("preview-container")
+    
+    hide("multi-preview-container")    # Hide the other table
+    show("preview-wrapper")            # Show the full-width preview container
+    show("preview-container")          # Show the Arrumação preview
   })
   
   output$preview <- renderDataTable({
@@ -319,7 +350,52 @@ server <- function(input, output, session) {
       write_csv(processed_data(), file)
     }
   )
+  
+  # Reactive for multi-file processing
+  multi_processed_data <- reactiveVal(NULL)
+  
+  observeEvent(input$process_multi, {
+    req(input$multi_csv_file)
+    
+    files <- input$multi_csv_file
+    
+    tryCatch({
+      all_data <- map2(files$datapath, files$name, function(path, name) {
+        if (grepl("\\.txt$", name, ignore.case = TRUE)) {
+          read_delim(path, delim = "\t", show_col_types = FALSE)
+        } else {
+          read_csv(path, show_col_types = FALSE)
+        }
+      }) %>% bind_rows()
+      
+      multi_processed_data(all_data)
+      
+      hide("preview-container")            # Hide the Arrumação table
+      show("preview-wrapper")              # Show full-width preview container
+      show("multi-preview-container")      # Show the Compilação preview
+      
+    }, error = function(e) {
+      showModal(modalDialog(
+        title = "Erro ao ler ficheiros",
+        paste("Erro ao processar os ficheiros:", e$message),
+        easyClose = TRUE
+      ))
+    })
+  })
+  
+  output$multi_preview <- renderDataTable({
+    req(multi_processed_data())
+    datatable(multi_processed_data(), options = list(dom = '<"top-container"l f>rtip'))
+  })
+  
+  output$download_multi <- downloadHandler(
+    filename = function() { "compilado.csv" },
+    content = function(file) {
+      req(multi_processed_data())
+      write_csv(multi_processed_data(), file)
+    }
+  )
 }
 
-# Run the application
+
 shinyApp(ui = ui, server = server)
