@@ -1,3 +1,4 @@
+
 library(shiny)
 library(tidyverse)
 library(sismar)
@@ -300,7 +301,7 @@ ui <- fluidPage(
                      div(class = "right-panel",
                          div(style = "padding-top: 15px;",
                              p(HTML("<i class='fa fa-layer-group'></i> Compilação de Ficheiros Processados"), class = "intro-heading"),
-                             p("As vezes, é útil compilar ficheiros processados para vários programas (por exemplo, TARV, ANC e CCR) ou períodos (por exemplo, anos 2023, 2024 e 2025).  Selecione vários ficheiros processados com os controlos abaixo. Note que, usando o botão “Procurar”, pode-se selecionar vários ficheiros .csv ou .txt.", class = "intro-text")
+                             p("As vezes, é útil compilar ficheiros processados para vários programas (por exemplo, TARV, ANC e CCR) ou períodos (por exemplo, anos 2023, 2024 e 2025).  Selecione vários ficheiros processados com os controlos abaixo. Note que, utilizando o botão “Procurar”, pode-se selecionar múltiplos ficheiros .csv ou .txt.", class = "intro-text")
                          ),
                          div(style = "margin-top: 25px;",
                              id = "multi_csv_file_wrapper",
