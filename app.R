@@ -1,13 +1,17 @@
 
 library(shiny)
 library(tidyverse)
-library(sismar)
 library(usethis)
 library(janitor)
 library(shinythemes)
 library(shinyjs)
 library(DT)
 library(shinyWidgets)
+
+if (!requireNamespace("sismar", quietly = TRUE)) {
+  remotes::install_github("usaid-mozambique/sismar")
+}
+library(sismar)
 
 # Define UI for application
 ui <- fluidPage(
