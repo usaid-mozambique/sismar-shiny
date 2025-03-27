@@ -597,7 +597,7 @@ server <- function(input, output, session) {
     selected_years <- input$pop_years_range
     
     tryCatch({
-      processed <- process_pop_ine(
+      processed <- sismar::process_pop_ine(
         file_inventory = input$pop_files$datapath,
         input_sheets = selected_years,
         age_level = input$pop_age_level
