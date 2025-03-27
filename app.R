@@ -6,16 +6,32 @@ library(janitor)
 library(shinythemes)
 library(shinyjs)
 library(DT)
+library(shinyWidgets)
 
 # Define UI for application
 ui <- fluidPage(
-  
   useShinyjs(),
   theme = shinytheme("flatly"),
   
   tags$head(
+    tags$script(HTML("
+      $(document).on('shiny:value', function(e) {
+        setTimeout(function() {
+          $('.irs-grid-text').each(function() {
+            var val = parseInt($(this).text());
+            if ([2020, 2025, 2030, 2035, 2040].includes(val)) {
+              $(this).css({'color': '#333', 'font-weight': 'bold'});
+            } else {
+              $(this).css({'color': '#ccc', 'font-weight': 'normal'});
+            }
+          });
+        }, 200);
+      });
+    ")),
+        
     # Load Google Fonts
     tags$link(href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:wght@300;400;700&display=swap", rel="stylesheet"),
+    
     tags$style(HTML("
       body {
         font-family: 'Montserrat', sans-serif;
@@ -28,8 +44,45 @@ ui <- fluidPage(
           width: 50%;
         }
         }
-      
       }
+      
+      /* Hide the default radio */
+      input[type='radio'] {
+        appearance: none;
+        -webkit-appearance: none;
+        background-color: #fff;
+        margin: 0 5px 0 0;
+        font: inherit;
+        color: currentColor;
+        width: 16px;
+        height: 16px;
+        border: 2px solid #999;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        top: 3px;
+        cursor: pointer;
+        vertical-align: middle;
+        transition: border 0.2s ease;
+      }
+
+      /* Selected state (yellow border) */
+      input[type='radio']:checked {
+        border-color: #007268;
+      }
+
+      /* Inner dot when selected */
+      input[type='radio']:checked::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background-color: #007268;
+        border-radius: 50%;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+      }
+      
 
       h1, h2, h3, h4, h5, h6, .intro-heading {
         font-family: 'Lato', sans-serif;
@@ -209,19 +262,80 @@ ui <- fluidPage(
         gap: 20px;
         flex-wrap: wrap;
       }
+
+      /* Customize slider color */
+      .irs-bar {
+        background-color: #007268 !important;  /* Your green for selected range */
+        height: 4px !important;
+      }
       
+      /* Customize unselected slider color */
+      .irs-line {
+        background: #ccc !important;
+        height: 4px !important;
+        border: none !important;
+        border-radius: 2px !important;
+      }
+      
+      /* Customize slider tick label */
+      .irs-grid-text {
+        background: none !important;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-weight: normal;
+        color: #999 !important;  
+      }
+      
+      /* Customize vertical tick lines */
+      .irs-grid-pol {
+        background-color: #ccc !important;
+      }
+      
+      /* Customize label above the left handle of a range slider */
+      .irs-from {
+        font-size: 10px !important;
+        background-color: #007268 !important;
+        border-color: #007268 !important;
+        color: white !important;
+      }
+      
+      /* Customize label above the right handle of a range slider */
+      .irs-to {
+        font-size: 10px !important;
+        background-color: #007268 !important;
+        border-color: #007268 !important;
+        color: white !important;
+      }
+      
+      /* Customize draggable handle on the slider */
+      .irs-slider {
+        background-color: #007268 !important;
+        border-color: #007268 !important;
+      }
+      
+      /* Customize slider circular handles */
+      .irs-handle {
+        width: 14px !important;
+        height: 14px !important;
+        top: 20px !important;
+        background: white !important;
+        border: 2px solid #007268 !important;
+      }
+      
+      /* Customize data preview visual box */
       #preview-wrapper {
         padding: 10px;
         background-color: #ffffff;
-        border-top: 1px solid #d9dddc; /* Thin gray separator line */
+        border-top: 1px solid #d9dddc;
         margin-top: 30px;
       }
 
-
+      /* Customize the main content area */
       .dataTable tbody tr {
         height: 20px !important;
         line-height: 1 !important;
       }
+      
     ")),
     
     tags$link(
@@ -315,12 +429,11 @@ ui <- fluidPage(
                      )
                  ),
                  
-                 # ✅ Preview Panel FULL WIDTH - placed OUTSIDE flex wrapper
+                 
                  div(id = "preview-wrapper",
                      style = "display: none; margin-top: 25px;",
                      
-                     # Dynamic filename display (same style for both types)
-                     uiOutput("preview_header"),  # ✅ Add this new UI output
+                     uiOutput("preview_header"),
                      
                      div(id = "preview-container", dataTableOutput("preview")),
                      div(id = "multi-preview-container", dataTableOutput("multi_preview"))
@@ -329,6 +442,22 @@ ui <- fluidPage(
              )
     ),
     
+    tabPanel("Processamento Pop.",
+             div(id = "pop-panel",
+                 div(style = "padding-top: 22px;",
+                     p(HTML("<i class='fa fa-people-group'></i> Processamento de Projecções Demográficas do INE"), class = "intro-heading"),
+                     p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text")
+                 ),
+                 fileInput("pop_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx"),
+                 uiOutput("pop_sheet_selector"),
+                 radioButtons("pop_age_level", "Nível de Idade:",
+                              choices = c("Exato" = "Exact", "Agrupado" = "Grouped"),
+                              selected = "Exact", inline = TRUE),
+                 actionButton("process_pop", "Processar", class = "btn btn-primary"),
+                 downloadButton("download_pop", "Descarregar", class = "btn btn-secondary"),
+                 dataTableOutput("pop_preview")
+             )
+      ),
     
     tabPanel("Metadados",
              fluidRow(
@@ -345,17 +474,18 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   options(shiny.maxRequestSize = 100*1024^2)
   
-  last_used <- reactiveVal(NULL)
   
-  # Reactive for single-file processing
+  last_used <- reactiveVal(NULL)
   processed_data <- reactiveVal(NULL)
+  pop_processed_data <- reactiveVal(NULL)
+  
   
   observeEvent(input$process, {
     req(input$csv_file)
     processed <- process_sisma_export(input$csv_file$datapath)
     processed_data(processed)
     
-    shinyjs::reset("multi_csv_file_wrapper")  # ✅ Clear the multi-file input
+    shinyjs::reset("multi_csv_file_wrapper")
     
     hide("multi-preview-container")
     show("preview-wrapper")
@@ -390,7 +520,7 @@ server <- function(input, output, session) {
   observeEvent(input$process_multi, {
     req(input$multi_csv_file)
     
-    shinyjs::reset("csv_file_wrapper")  # ✅ Clear the single-file input
+    shinyjs::reset("csv_file_wrapper")
     
     files <- input$multi_csv_file
     
@@ -405,11 +535,11 @@ server <- function(input, output, session) {
       
       multi_processed_data(all_data)
       
-      last_used("compilacao")  # ✅ Track that this was the last action
+      last_used("compilacao")
       
-      hide("preview-container")            # Hide the Arrumação table
-      show("preview-wrapper")              # Show full-width preview container
-      show("multi-preview-container")      # Show the Compilação preview
+      hide("preview-container")
+      show("preview-wrapper")
+      show("multi-preview-container")
       
     }, error = function(e) {
       showModal(modalDialog(
@@ -456,9 +586,69 @@ server <- function(input, output, session) {
   })
   
   
+  # Reactive to store the processed demographic data
+  processed_pop_data <- reactiveVal(NULL)
   
+  observeEvent(input$process_pop, {
+    req(input$pop_files)
+    req(input$pop_years_range)
+    
+    selected_years <- input$pop_years_range
+    
+    tryCatch({
+      processed <- process_pop_ine(
+        file_inventory = input$pop_files$datapath,
+        input_sheets = selected_years,
+        age_level = input$pop_age_level
+      )
+      pop_processed_data(processed)
+    }, error = function(e) {
+      showModal(modalDialog(
+        title = "Erro",
+        paste("Erro ao processar os ficheiros:", e$message),
+        easyClose = TRUE
+      ))
+    })
+  })
+  
+  pop_sheet_choices <- reactive({
+    req(input$pop_files)
+    
+    # Read all sheet names from all uploaded files
+    unique(unlist(lapply(input$pop_files$datapath, readxl::excel_sheets)))
+  })
+
+  output$pop_sheet_selector <- renderUI({
+    req(input$pop_files)
+    sheet_names <- unique(unlist(lapply(input$pop_files$datapath, readxl::excel_sheets)))
+    numeric_sheets <- suppressWarnings(as.numeric(sheet_names))
+    valid_years <- sort(na.omit(numeric_sheets))
+    
+    major_ticks <- seq(2020, 2100, by = 5)
+    choices <- as.character(valid_years)
+    selected <- c(min(choices), max(choices))
+    
+    sliderTextInput(
+      inputId = "pop_years_range",
+      label = "Selecione o intervalo de anos:",
+      choices = choices,
+      selected = selected,
+      grid = TRUE
+    )
+  })
+  
+  # Render DataTable for preview
+  output$pop_preview <- renderDataTable({
+    req(pop_processed_data())
+    datatable(pop_processed_data(), options = list(pageLength = 10))
+  })
+  
+  output$download_pop <- downloadHandler(
+    filename = function() { "projecoes_processadas.csv" },
+    content = function(file) {
+      write_csv(pop_processed_data(), file)
+    }
+  )
 }
-
-
-
+  
 shinyApp(ui = ui, server = server)
