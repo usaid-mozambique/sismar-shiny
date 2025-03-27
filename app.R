@@ -2,6 +2,7 @@
 library(shiny)
 library(tidyverse)
 library(sismar)
+library(usethis)
 library(janitor)
 library(shinythemes)
 library(shinyjs)
