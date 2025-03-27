@@ -13,6 +13,9 @@ ui <- fluidPage(
   useShinyjs(),
   theme = shinytheme("flatly"),
   
+  # load google fonts
+  tags$link(href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:wght@300;400;700&display=swap", rel="stylesheet"),
+  
   tags$head(
     tags$script(HTML("
       $(document).on('shiny:value', function(e) {
@@ -29,9 +32,6 @@ ui <- fluidPage(
       });
     ")),
         
-    # Load Google Fonts
-    tags$link(href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:wght@300;400;700&display=swap", rel="stylesheet"),
-    
     tags$style(HTML("
       body {
         font-family: 'Montserrat', sans-serif;
