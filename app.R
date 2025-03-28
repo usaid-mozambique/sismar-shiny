@@ -323,18 +323,19 @@ ui <- fluidPage(
   div(class = "sub-banner"),
   
   tabsetPanel(
-    tabPanel("Informação",
+    tabPanel("Informação", 
              fluidRow(
                column(12,
-                      p("Automatização com o 'sismar'", class = "intro-heading"),
+                      style = "padding-top: 25px; margin-left: 15px;",
+                      p(HTML("<i class='fa fa-gears'></i> Automatização de processamento de dados'"), class = "intro-heading"),
                       p("Análise eficiente de dados exportados dos sistemas de informação do Ministério da Saúde (MISAU) normalmente requer acções de processamento como a pivotagem, a eliminação/combinação de variáveis e a engenharia de dimensões úteis para análise. O pacote 'sismar' (desenvolvido na linguagem R de programação) automatiza essas acções de transformação, facilitando assim a exploração e análise de dados.  Este portal web fornece uma interface visual para aceder às ferramentas do 'sismar' e transformar ficheiros providenciados pelo utilizador.", class = "intro-text"),
-                      
-                      p("Complementaridade ao SISMA", class = "intro-heading"), 
+                      p(HTML("<i class='fa fa-link'></i> Complementaridade ao SISMA e outros sistemas"), class = "intro-heading"),
                       p("O pacote “sismar” foi desenvolvido como ferramenta complementar destinada a funcionar no âmbito mais alargado dos sistemas de informação do MISAU. A sua existência confere mais valor aos sistemas de base como o SISMA, fornecendo ferramentas que permitem uma análise mais fácil das estatísticas geradas por esses sistemas. O diagrama abaixo ilustra a relação entre o SISMA e a funcionalidade do pacote 'sismar'.", class = "intro-text")
                )
              ),
              fluidRow(
                column(12, 
+                      style = "padding-top: 25px; margin-left: 15px;",
                       div(style = "text-align: center; margin-top: 20px; margin-bottom: 20px;",
                           img(src = "diagrama_dados.png", width = "650px", height = "199px")
                       )
@@ -342,7 +343,8 @@ ui <- fluidPage(
              ),
              fluidRow(
                column(12,
-                      p("Documentação Completa do 'sismar'", class = "intro-heading"),
+                      style = "padding-top: 25px; margin-left: 15px;",
+                      p(HTML("<i class='fa fa-book'></i> Documentação detalhada do 'sismar'"), class = "intro-heading"),
                       p("A documentação completa sobre o “sismar”, incluindo o código-fonte do pacote, pode ser encontrada no ",
                         a("Github", href = "https://github.com/usaid-mozambique/sismar", target = "_blank"),
                         ". Além disso, é possível aceder a artigos de ajuda que demonstram casos de utilização do pacote (por exemplo, como gerar e descarregar ficheiros de exportação SISMA compatíveis) através da página de ",
@@ -352,7 +354,7 @@ ui <- fluidPage(
              )
     ),
     
-    tabPanel("Processamento SISMA",
+    tabPanel("P-SISMA",
              div(id = "processamento-panel",
                  
                  # Side-by-side panels
@@ -410,12 +412,10 @@ ui <- fluidPage(
              )
     ),
     
-    tabPanel("Processamento Pop.",
-             div(id = "pop-panel",
-                 div(style = "padding-top: 22px;",
-                     p(HTML("<i class='fa fa-people-group'></i> Processamento de Projecções Demográficas do INE"), class = "intro-heading"),
-                     p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text")
-                 ),
+    tabPanel("P-População",
+             div(id = "pop-panel", style = "padding-top: 25px; margin-left: 15px;",
+                 p(HTML("<i class='fa fa-people-group'></i> Arrumação de Projecções Demográficas do INE"), class = "intro-heading"),
+                 p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text"),
                  fileInput("pop_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx"),
                  uiOutput("pop_sheet_selector"),
                  radioButtons("pop_age_level", "Nível de Idade:",
@@ -426,6 +426,81 @@ ui <- fluidPage(
                  dataTableOutput("pop_preview")
              )
     ),
+    
+    tabPanel("P-DISA LAB",
+             div(id = "disa-panel",
+                 
+                 # Side-by-side layout
+                 div(class = "side-by-side-wrapper",
+                     
+                     # Left Panel
+                     div(class = "left-panel",
+                         div(style = "padding-top: 15px; margin-left: 5px;",
+                             p(HTML("<i class='fa fa-dna'></i> Arrumação de Dados CV (DISA)"), class = "intro-heading"),
+                             p("Carregue o ficheiro do sistema DISA (.xlsx) referente ao Carga Viral, defina o mês dos dados exportados de OpenLDR, e descarregue o resultado processado.", class = "intro-text")
+                         ),
+                         fileInput("disa_file", "Escolha ficheiro .xlsx", accept = ".xlsx"),
+                         dateInput("disa_month", "Selecione o mês:", format = "yyyy-mm"),
+                         div(class = "btn-container",
+                             actionButton("process_disa", "Processar", class = "btn btn-primary"),
+                             downloadButton("download_disa", "Descarregar", class = "btn btn-secondary")
+                         )
+                     ),
+                     
+                     # Divider
+                     div(class = "divider"),
+                     
+                     # Right Panel (DPI)
+                     div(class = "right-panel",
+                         div(style = "padding-top: 15px",
+                             p(HTML("<i class='fa fa-vials'></i> Arrumação de Dados DPI (DISA)"), class = "intro-heading"),
+                             p("Carregue o ficheiro do sistema DISA (.xlsx) referente ao DPI, defina o mês dos dados e o tipo de estrutura do ficheiro, e descarregue o resultado processado.", class = "intro-text")
+                         ),
+                         
+                         fileInput("dpi_file", "Escolha ficheiro .xlsx", accept = ".xlsx"),
+                         
+                         dateInput("dpi_month", "Selecione o mês:", format = "yyyy-mm"),
+                         
+                         selectInput("dpi_type", "Tipo de ficheiro DPI:",
+                                     choices = c("Novo formato" = "new", "Formato antigo" = "old"),
+                                     selected = "new"),
+                         
+                         div(class = "btn-container",
+                             actionButton("process_dpi", "Processar", class = "btn btn-primary"),
+                             downloadButton("download_dpi", "Descarregar", class = "btn btn-secondary")
+                         )
+                     )
+                     
+                 ),
+                 
+                 div(
+                   id = "preview-wrapper",
+                   style = "padding: 10px; background-color: #ffffff; border-top: 1px solid #d9dddc; margin-top: 30px;",
+                   
+                   uiOutput("disa_preview_header"),
+                   dataTableOutput("disa_preview"),
+                   dataTableOutput("dpi_preview")
+                   
+                 )
+                 
+             )
+    ),
+    
+    tabPanel("P-LMIS",
+             div(id = "lmis-panel", style = "padding-top: 25px; margin-left: 15px;",
+                 p(HTML("<i class='fa fa-warehouse'></i> Arrumação de dados de stock da cadeia de abastecimento (CMAM)"), class = "intro-heading"),
+                 p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text"),
+                 fileInput("lmis_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx"),
+                 uiOutput("lmis_sheet_selector"),
+                 radioButtons("lmis_age_level", "Nível de Idade:",
+                              choices = c("Exato" = "Exact", "Agrupado" = "Grouped"),
+                              selected = "Exact", inline = TRUE),
+                 actionButton("process_lmis", "Processar", class = "btn btn-primary"),
+                 downloadButton("download_lmis", "Descarregar", class = "btn btn-secondary"),
+                 dataTableOutput("lmis_preview")
+             )
+    ),
+    
     
     tabPanel("Metadados",
              fluidRow(
@@ -449,8 +524,12 @@ server <- function(input, output, session) {
   
   observeEvent(input$process, {
     req(input$csv_file)
-    processed <- process_sisma_export(input$csv_file$datapath)
-    processed_data(processed)
+    
+    withProgress(message = "A processar ficheiro SISMA...", value = 0.5, {
+      processed <- process_sisma_export(input$csv_file$datapath)
+      processed_data(processed)
+      Sys.sleep(0.3)  # Optional: smooth UI transition
+    })
     
     shinyjs::reset("multi_csv_file_wrapper")
     
@@ -459,8 +538,8 @@ server <- function(input, output, session) {
     show("preview-container")
     
     last_used("arrumacao")
-    
   })
+  
   
   
   output$preview <- renderDataTable({
@@ -540,7 +619,7 @@ server <- function(input, output, session) {
     if (last_used() == "arrumacao" && !is.null(input$csv_file)) {
       tags$p(
         class = "intro-text",
-        tags$strong(HTML("<i class='fa fa-broom'></i> Ficheiro processado: ")),
+        tags$strong(HTML("<i class='fa fa-broom'></i> Ficheiro arrumado: ")),
         input$csv_file$name
       )
     } else if (last_used() == "compilacao" && !is.null(input$multi_csv_file)) {
@@ -619,6 +698,108 @@ server <- function(input, output, session) {
       write_csv(pop_processed_data(), file)
     }
   )
+  
+  
+  # Reactive value to store processed DISA data
+  disa_processed_data <- reactiveVal(NULL)
+  
+  # Observe processing of DISA file
+  observeEvent(input$process_disa, {
+    req(input$disa_file)
+    req(input$disa_month)
+    
+    show("preview-wrapper")
+    
+    # Force date to 20th of selected month
+    selected_month <- as.Date(format(input$disa_month, "%Y-%m-01"))
+    fixed_date <- as.Date(format(selected_month, "%Y-%m-20"))
+    
+    tryCatch({
+      processed <- sismar::process_disa_cv(
+        file = input$disa_file$datapath,
+        month = fixed_date
+      )
+      disa_processed_data(processed)
+      
+      show("disa_preview_wrapper")
+    }, error = function(e) {
+      showModal(modalDialog(
+        title = "Erro",
+        paste("Erro ao processar o ficheiro DISA:", e$message),
+        easyClose = TRUE
+      ))
+    })
+  })
+  
+  # Render DISA data table
+  output$disa_preview <- renderDataTable({
+    req(disa_processed_data())
+    datatable(disa_processed_data(), options = list(pageLength = 10))
+  })
+  
+  # Download handler for DISA output
+  output$download_disa <- downloadHandler(
+    filename = function() { "disa_processado.csv" },
+    content = function(file) {
+      write_csv(disa_processed_data(), file)
+    }
+  )
+  
+  
+  output$disa_preview_header <- renderUI({
+  req(input$disa_file)
+  tags$p(
+    class = "intro-text",
+    tags$strong(HTML("<i class='fa fa-vials'></i> Ficheiro processado: ")),
+    input$disa_file$name
+  )
+})
+  
+  # Reactive value to store processed DPI data
+  dpi_processed_data <- reactiveVal(NULL)
+  
+  # Observe processing of DPI file
+  observeEvent(input$process_dpi, {
+    req(input$dpi_file)
+    req(input$dpi_month)
+    req(input$dpi_type)
+    
+    # Set date to 20th of selected month
+    selected_month <- as.Date(format(input$dpi_month, "%Y-%m-01"))
+    fixed_date <- as.Date(format(selected_month, "%Y-%m-20"))
+    
+    tryCatch({
+      processed <- sismar::process_disa_dpi(
+        file = input$dpi_file$datapath,
+        period = fixed_date,
+        type = input$dpi_type
+      )
+      dpi_processed_data(processed)
+    }, error = function(e) {
+      showModal(modalDialog(
+        title = "Erro",
+        paste("Erro ao processar o ficheiro DPI:", e$message),
+        easyClose = TRUE
+      ))
+    })
+  })
+  
+  # Render DPI preview
+  output$dpi_preview <- renderDataTable({
+    req(dpi_processed_data())
+    datatable(dpi_processed_data(), options = list(pageLength = 10))
+  })
+  
+  # Download handler for DPI
+  output$download_dpi <- downloadHandler(
+    filename = function() { "dpi_processado.csv" },
+    content = function(file) {
+      write_csv(dpi_processed_data(), file)
+    }
+  )
+  
+  
+  
 }
   
 shinyApp(ui = ui, server = server)
