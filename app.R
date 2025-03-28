@@ -7,11 +7,7 @@ library(shinythemes)
 library(shinyjs)
 library(DT)
 library(shinyWidgets)
-
-if (!requireNamespace("sismar", quietly = TRUE)) {
-  remotes::install_github("usaid-mozambique/sismar")
-}
-library(sismar)
+devtools::load_all("sismar")
 
 # Define UI for application
 ui <- fluidPage(
