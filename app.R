@@ -7,7 +7,7 @@ library(shinythemes)
 library(shinyjs)
 library(DT)
 library(shinyWidgets)
-devtools::load_all("sismar")
+library(sismar)
 
 # Define UI for application
 ui <- fluidPage(
