@@ -328,15 +328,15 @@ ui <- fluidPage(
                column(12,
                       style = "padding-top: 25px; margin-left: 15px;",
                       p(HTML("<i class='fa fa-gears'></i> Automatização de processamento de dados'"), class = "intro-heading"),
-                      p("Análise eficiente de dados exportados dos sistemas de informação do Ministério da Saúde (MISAU) normalmente requer acções de processamento como a pivotagem, a eliminação/combinação de variáveis e a engenharia de dimensões úteis para análise. O pacote 'sismar' (desenvolvido na linguagem R de programação) automatiza essas acções de transformação, facilitando assim a exploração e análise de dados.  Este portal web fornece uma interface visual para aceder às ferramentas do 'sismar' e transformar ficheiros providenciados pelo utilizador.", class = "intro-text"),
+                      p("Análise eficiente de dados exportados dos sistemas de informação do Ministério da Saúde (MISAU) normalmente requer acções de processamento como a pivotagem, a eliminação/combinação de variáveis e a engenharia de dimensões úteis para análise. O pacote 'sismar' automatiza essas acções de transformação, facilitando assim a exploração e análise de dados.  Este portal web fornece uma interface visual para aceder às ferramentas do 'sismar' e transformar ficheiros providenciados pelo utilizador.", class = "intro-text"),
                       p(HTML("<i class='fa fa-link'></i> Complementaridade ao SISMA e outros sistemas"), class = "intro-heading"),
-                      p("O pacote “sismar” foi desenvolvido como ferramenta complementar destinada a funcionar no âmbito mais alargado dos sistemas de informação do MISAU. A sua existência confere mais valor aos sistemas de base como o SISMA, fornecendo ferramentas que permitem uma análise mais fácil das estatísticas geradas por esses sistemas. O diagrama abaixo ilustra a relação entre o SISMA e a funcionalidade do pacote 'sismar'.", class = "intro-text")
+                      p("O pacote 'sismar' foi desenvolvido como ferramenta complementar destinada a funcionar no âmbito mais alargado dos sistemas de informação do MISAU. A sua existência confere mais valor aos sistemas de base como o SISMA, fornecendo ferramentas que permitem uma análise mais fácil das estatísticas geradas por esses sistemas. O diagrama abaixo ilustra a relação entre o SISMA e a funcionalidade do pacote 'sismar'.", class = "intro-text")
                )
              ),
              fluidRow(
                column(12, 
-                      style = "padding-top: 25px; margin-left: 15px;",
-                      div(style = "text-align: center; margin-top: 20px; margin-bottom: 20px;",
+                      style = "padding-top: 25px; margin-left: 50px;",
+                      div(style = "text-align: left; margin-top: 20px; margin-bottom: 20px;",
                           img(src = "diagrama_dados.png", width = "650px", height = "199px")
                       )
                )
@@ -488,7 +488,7 @@ ui <- fluidPage(
     
     tabPanel("P-LMIS",
              div(id = "lmis-panel", style = "padding-top: 25px; margin-left: 15px;",
-                 p(HTML("<i class='fa fa-warehouse'></i> Arrumação de dados de stock da cadeia de abastecimento (CMAM)"), class = "intro-heading"),
+                 p(HTML("<i class='fa fa-warehouse'></i> Arrumação de dados da cadeia de abastecimento (CMAM)"), class = "intro-heading"),
                  p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text"),
                  fileInput("lmis_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx"),
                  uiOutput("lmis_sheet_selector"),
