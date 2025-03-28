@@ -3844,6 +3844,13 @@
         "Archs": "yaml.so.dSYM"
       }
     },
+    "shinyWidgets": {
+      "Package": "shinyWidgets",
+      "Version": "0.9.0",        // use the version you're using
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org"
+    }
+  },
     "zip": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
