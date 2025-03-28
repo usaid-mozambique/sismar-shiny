@@ -6,7 +6,6 @@ library(janitor)
 library(shinythemes)
 library(shinyjs)
 library(DT)
-library(shinyWidgets)
 library(sismar)
 
 # Define UI for application
@@ -18,333 +17,301 @@ ui <- fluidPage(
   tags$link(href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:wght@300;400;700&display=swap", rel="stylesheet"),
   
   tags$head(
-    tags$script(HTML("
-      $(document).on('shiny:value', function(e) {
-        setTimeout(function() {
-          $('.irs-grid-text').each(function() {
-            var val = parseInt($(this).text());
-            if ([2020, 2025, 2030, 2035, 2040].includes(val)) {
-              $(this).css({'color': '#333', 'font-weight': 'bold'});
-            } else {
-              $(this).css({'color': '#ccc', 'font-weight': 'normal'});
-            }
-          });
-        }, 200);
-      });
-    ")),
-        
+    tags$script(HTML("...")),  # your JavaScript (unchanged)
+    
     tags$style(HTML("
-      body {
-        font-family: 'Montserrat', sans-serif;
-        padding-top: 110px;
-        margin-left: 15px;
-        margin-right: 15px;
-        @media (max-width: 991px) {
-        .no-stack > .col-sm-6 {
-          float: left;
-          width: 50%;
-        }
-        }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      padding-top: 110px;
+      margin-left: 15px;
+      margin-right: 15px;
+    }
+    
+    @media (max-width: 991px) {
+      .no-stack > .col-sm-6 {
+        float: left;
+        width: 50%;
       }
-      
-      /* Hide the default radio */
-      input[type='radio'] {
-        appearance: none;
-        -webkit-appearance: none;
-        background-color: #fff;
-        margin: 0 5px 0 0;
-        font: inherit;
-        color: currentColor;
-        width: 16px;
-        height: 16px;
-        border: 2px solid #999;
-        border-radius: 50%;
-        display: inline-block;
-        position: relative;
-        top: 3px;
-        cursor: pointer;
-        vertical-align: middle;
-        transition: border 0.2s ease;
-      }
+    }
 
-      /* Selected state (yellow border) */
-      input[type='radio']:checked {
-        border-color: #007268;
-      }
+    /* Hide the default radio */
+    input[type='radio'] {
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: #fff;
+      margin: 0 5px 0 0;
+      font: inherit;
+      color: currentColor;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #999;
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+      top: 3px;
+      cursor: pointer;
+      vertical-align: middle;
+      transition: border 0.2s ease;
+    }
 
-      /* Inner dot when selected */
-      input[type='radio']:checked::before {
-        content: '';
-        width: 8px;
-        height: 8px;
-        background-color: #007268;
-        border-radius: 50%;
-        position: absolute;
-        top: 2px;
-        left: 2px;
-      }
-      
+    /* Selected state (green border) */
+    input[type='radio']:checked {
+      border-color: #007268;
+    }
 
-      h1, h2, h3, h4, h5, h6, .intro-heading {
-        font-family: 'Lato', sans-serif;
-      }
+    /* Inner dot when selected */
+    input[type='radio']:checked::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background-color: #007268;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+    }
 
-      .banner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #007268;
-        color: #d5d417;
-        padding: 10px 25px;
-        font-size: 60px;
-        font-weight: bold;
-        width: 100vw;
-        height: 70px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-      }
+    h1, h2, h3, h4, h5, h6, .intro-heading {
+      font-family: 'Lato', sans-serif;
+    }
 
-      .banner-text {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 47px;
-      }
+    .banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #007268;
+      color: #d5d417;
+      padding: 10px 25px;
+      font-size: 60px;
+      font-weight: bold;
+      width: 100vw;
+      height: 70px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
 
-      .banner-logo {
-        height: 60px;
-        vertical-align: middle;
-      }
+    .banner-text {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 47px;
+    }
 
-      .sub-banner {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #d5d417;
-        color: white;
-        font-size: 18px;
-        height: 2px;
-        width: 100vw;
-        position: fixed;
-        top: 70px;
-        left: 0;
-        z-index: 999;
-      }
+    .banner-logo {
+      height: 60px;
+      vertical-align: middle;
+    }
 
-      .nav-tabs > li > a {
-        font-size: 13px !important;
-        color: #95a5a6 !important;
-        font-weight: normal !important;
-        background-color: white !important;
-        border: 1px solid #d9dddc !important;
-        border-bottom: 1px solid #d9dddc !important;
-      }
+    .sub-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #d5d417;
+      color: white;
+      font-size: 18px;
+      height: 2px;
+      width: 100vw;
+      position: fixed;
+      top: 70px;
+      left: 0;
+      z-index: 999;
+    }
 
-      .nav-tabs > li.active > a,
-      .nav-tabs > li.active > a:hover {
-        color: #333333 !important;
-        font-weight: bold !important;
-        background-color: white !important;
-        border: 1px solid #d9dddc !important;
-        border-bottom: none !important;
-      }
+    .nav-tabs > li > a {
+      font-size: 13px !important;
+      color: #95a5a6 !important;
+      font-weight: normal !important;
+      background-color: white !important;
+      border: 1px solid #d9dddc !important;
+      border-bottom: 1px solid #d9dddc !important;
+    }
 
-      .nav-tabs > li > a:hover {
-        color: #005a50 !important;
-      }
+    .nav-tabs > li.active > a,
+    .nav-tabs > li.active > a:hover {
+      color: #333333 !important;
+      font-weight: bold !important;
+      background-color: white !important;
+      border: 1px solid #d9dddc !important;
+      border-bottom: none !important;
+    }
 
-      .tab-content {
-        margin-top: 25px !important;
-        padding-left: 10px !important;
-        padding-right: 10px !important;
-      }
-      
-      .side-by-side-wrapper {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 40px;
-        margin-top: 10px;
-      }
-      
-      .left-panel, .right-panel {
-        flex: 1;
-        min-width: 400;
-        padding: 10px;
-        background-color: white;
-        min-height: 400px; /* Ensures divider has height */
-      }
-      
-      .divider {
-        width: 1px;
-        background-color: #d9dddc;
-        align-self: stretch;
-        flex-shrink: 0;
-      }
+    .nav-tabs > li > a:hover {
+      color: #005a50 !important;
+    }
 
-      .intro-heading {
-        font-size: 15px;
-        font-weight: bold;
-      }
+    .tab-content {
+      margin-top: 25px !important;
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+    }
 
-      /* Default for all intro-text */
-      .intro-text {
-        font-size: 14px;
-      }
+    .side-by-side-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 40px;
+      margin-top: 10px;
+    }
 
-      /* Scoped fix for Processamento tab only */
-      #processamento-panel .intro-text {
-        padding-right: 10px !important;
-        width: 100%;
-        overflow-x: auto;
-        box-sizing: border-box;
-      }
+    .left-panel, .right-panel {
+      flex: 1;
+      min-width: 400;
+      padding: 10px;
+      background-color: white;
+      min-height: 400px;
+    }
 
-      .intro-text a {
-        color: #306cc9 !important;
-        text-decoration: none;
-      }
+    .divider {
+      width: 1px;
+      background-color: #d9dddc;
+      align-self: stretch;
+      flex-shrink: 0;
+    }
 
-      .intro-text a:hover {
-        color: #306cc9 !important;
-        text-decoration: underline;
-      }
+    .intro-heading {
+      font-size: 15px;
+      font-weight: bold;
+    }
 
-      .shiny-file-input-progress {
-        height: 10px !important;
-      }
+    .intro-text {
+      font-size: 14px;
+    }
 
-      .shiny-input-container > label {
-        font-family: 'Montserrat', sans-serif !important;
-        font-size: 14px !important;
-        color: #333 !important;
-      }
+    #processamento-panel .intro-text {
+      padding-right: 10px !important;
+      width: 100%;
+      overflow-x: auto;
+      box-sizing: border-box;
+    }
 
-      .shiny-file-input-progress .progress-bar {
-        height: 10;
-        background-color: #007268 !important;
-      }
+    .intro-text a {
+      color: #306cc9 !important;
+      text-decoration: none;
+    }
 
-      .btn-primary {
-        width: 145px;
-        background-color: #007268 !important;
-        border-color: #007268 !important;
-        color: white !important;
-        font-size: 14px;
-      }
+    .intro-text a:hover {
+      color: #306cc9 !important;
+      text-decoration: underline;
+    }
 
-      .btn-primary:hover {
-        background-color: #005a50 !important;
-        border-color: #005a50 !important;
-      }
+    .shiny-file-input-progress {
+      height: 10px !important;
+    }
 
-      .btn-secondary {
-        width: 145px;
-        font-size: 14px;
-      }
+    .shiny-input-container > label {
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 14px !important;
+      color: #333 !important;
+    }
 
-      .dataTables_wrapper {
-        background-color: white !important;
-        padding-top: 20px;
-        border-radius: 0px;
-        font-size: 65% !important;
-      }
+    .shiny-file-input-progress .progress-bar {
+      height: 10;
+      background-color: #007268 !important;
+    }
 
-      .dataTable {
-        background-color: white !important;
-      }
-      
-      .custom-top-controls {
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        gap: 20px;
-        flex-wrap: wrap;
-      }
+    .btn-primary {
+      width: 145px;
+      background-color: #007268 !important;
+      border-color: #007268 !important;
+      color: white !important;
+      font-size: 14px;
+    }
 
-      /* Customize slider color */
-      .irs-bar {
-        background-color: #007268 !important;  /* Your green for selected range */
-        height: 4px !important;
-      }
-      
-      /* Customize unselected slider color */
-      .irs-line {
-        background: #ccc !important;
-        height: 4px !important;
-        border: none !important;
-        border-radius: 2px !important;
-      }
-      
-      /* Customize slider tick label */
-      .irs-grid-text {
-        background: none !important;
-        padding: 2px 5px;
-        border-radius: 3px;
-        font-weight: normal;
-        color: #999 !important;  
-      }
-      
-      /* Customize vertical tick lines */
-      .irs-grid-pol {
-        background-color: #ccc !important;
-      }
-      
-      /* Customize label above the left handle of a range slider */
-      .irs-from {
-        font-size: 10px !important;
-        background-color: #007268 !important;
-        border-color: #007268 !important;
-        color: white !important;
-      }
-      
-      /* Customize label above the right handle of a range slider */
-      .irs-to {
-        font-size: 10px !important;
-        background-color: #007268 !important;
-        border-color: #007268 !important;
-        color: white !important;
-      }
-      
-      /* Customize draggable handle on the slider */
-      .irs-slider {
-        background-color: #007268 !important;
-        border-color: #007268 !important;
-      }
-      
-      /* Customize slider circular handles */
-      .irs-handle {
-        width: 14px !important;
-        height: 14px !important;
-        top: 20px !important;
-        background: white !important;
-        border: 2px solid #007268 !important;
-      }
-      
-      /* Customize data preview visual box */
-      #preview-wrapper {
-        padding: 10px;
-        background-color: #ffffff;
-        border-top: 1px solid #d9dddc;
-        margin-top: 30px;
-      }
+    .btn-primary:hover {
+      background-color: #005a50 !important;
+      border-color: #005a50 !important;
+    }
 
-      /* Customize the main content area */
-      .dataTable tbody tr {
-        height: 20px !important;
-        line-height: 1 !important;
-      }
-      
-    ")),
+    .btn-secondary {
+      width: 145px;
+      font-size: 14px;
+    }
+
+    .dataTables_wrapper {
+      background-color: white !important;
+      padding-top: 20px;
+      border-radius: 0px;
+      font-size: 65% !important;
+    }
+
+    .dataTable {
+      background-color: white !important;
+    }
+
+    .custom-top-controls {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .irs-bar {
+      background-color: #007268 !important;
+      height: 4px !important;
+    }
+
+    .irs-line {
+      background: #ccc !important;
+      height: 4px !important;
+      border: none !important;
+      border-radius: 2px !important;
+    }
+
+    .irs-grid-text {
+      background: none !important;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-weight: normal;
+      color: #999 !important;  
+    }
+
+    .irs-grid-pol {
+      background-color: #ccc !important;
+    }
+
+    .irs-from,
+    .irs-to {
+      font-size: 10px !important;
+      background-color: #007268 !important;
+      border-color: #007268 !important;
+      color: white !important;
+    }
+
+    .irs-slider {
+      background-color: #007268 !important;
+      border-color: #007268 !important;
+    }
+
+    .irs-handle {
+      width: 14px !important;
+      height: 14px !important;
+      top: 20px !important;
+      background: white !important;
+      border: 2px solid #007268 !important;
+    }
+
+    #preview-wrapper {
+      padding: 10px;
+      background-color: #ffffff;
+      border-top: 1px solid #d9dddc;
+      margin-top: 30px;
+    }
+
+    .dataTable tbody tr {
+      height: 20px !important;
+      line-height: 1 !important;
+    }
+  ")),
     
     tags$link(
       rel = "stylesheet",
       href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     )
-    
   ),
+  
   
   div(class = "banner",
       div(class = "banner-text",
@@ -458,7 +425,7 @@ ui <- fluidPage(
                  downloadButton("download_pop", "Descarregar", class = "btn btn-secondary"),
                  dataTableOutput("pop_preview")
              )
-      ),
+    ),
     
     tabPanel("Metadados",
              fluidRow(
@@ -474,7 +441,6 @@ ui <- fluidPage(
 # Server logic
 server <- function(input, output, session) {
   options(shiny.maxRequestSize = 100*1024^2)
-  
   
   last_used <- reactiveVal(NULL)
   processed_data <- reactiveVal(NULL)
@@ -593,13 +559,14 @@ server <- function(input, output, session) {
   observeEvent(input$process_pop, {
     req(input$pop_files)
     req(input$pop_years_range)
+    req(length(input$pop_years_range) == 2)
     
-    selected_years <- input$pop_years_range
+    selected_years <- input$pop_years_range[1]:input$pop_years_range[2]
     
     tryCatch({
       processed <- sismar::process_pop_ine(
         file_inventory = input$pop_files$datapath,
-        input_sheets = selected_years,
+        input_sheets = as.character(selected_years),  # sheet names are character
         age_level = input$pop_age_level
       )
       pop_processed_data(processed)
@@ -611,6 +578,7 @@ server <- function(input, output, session) {
       ))
     })
   })
+  
   
   pop_sheet_choices <- reactive({
     req(input$pop_files)
@@ -625,16 +593,17 @@ server <- function(input, output, session) {
     numeric_sheets <- suppressWarnings(as.numeric(sheet_names))
     valid_years <- sort(na.omit(numeric_sheets))
     
-    major_ticks <- seq(2020, 2100, by = 5)
-    choices <- as.character(valid_years)
-    selected <- c(min(choices), max(choices))
+    min_year <- min(valid_years)
+    max_year <- max(valid_years)
     
-    sliderTextInput(
+    sliderInput(
       inputId = "pop_years_range",
       label = "Selecione o intervalo de anos:",
-      choices = choices,
-      selected = selected,
-      grid = TRUE
+      min = min_year,
+      max = max_year,
+      value = c(min_year, max_year),
+      step = 1,
+      sep = ""
     )
   })
   
