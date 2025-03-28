@@ -10,7 +10,7 @@ Arrumar dados do MISAU através de um aplicativo web
 
 ## Resumo
 
-O pacote `sismar` foi criado para arrumar dados dos sistemas de informação do MISAU, reduzindo assim barreiras à análise.  Esta aplicativo [`sismar` Shiny](https://josephlara-sismar-shiny.share.connect.posit.cloud/) fornece acesso através da web à funcionalidade sismar sem qualquer instalação de software.
+O pacote `sismar` foi criado para arrumar dados dos sistemas de informação do MISAU, reduzindo assim barreiras à análise.  Esta aplicativo [sismar Shiny](https://josephlara-sismar-shiny.share.connect.posit.cloud/) fornece acesso através da web à funcionalidade sismar sem qualquer instalação de software.
 
 
 ---
