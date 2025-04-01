@@ -1,4 +1,5 @@
 
+# define dependencies
 library(shiny)
 library(tidyverse)
 library(usethis)
@@ -8,7 +9,7 @@ library(shinyjs)
 library(DT)
 library(sismar)
 
-# Define UI for application
+# application UI
 ui <- fluidPage(
   useShinyjs(),
   theme = shinytheme("flatly"),
@@ -16,8 +17,9 @@ ui <- fluidPage(
   # load google fonts
   tags$link(href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:wght@300;400;700&display=swap", rel="stylesheet"),
   
+  # define css styling
   tags$head(
-    tags$script(HTML("...")),  # your JavaScript (unchanged)
+    tags$script(HTML("...")),
     
     tags$style(HTML("
     body {
@@ -306,13 +308,14 @@ ui <- fluidPage(
     }
   ")),
     
+    # load awesome font   
     tags$link(
       rel = "stylesheet",
       href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     )
   ),
   
-  
+  # build main banner
   div(class = "banner",
       div(class = "banner-text",
           img(src = "apple-touch-icon-180x180.png", class = "banner-logo"),
@@ -320,9 +323,13 @@ ui <- fluidPage(
       )
   ),
   
+  # build sub-banner
   div(class = "sub-banner"),
   
+  # build overarching panel
   tabsetPanel(
+    
+    # build information sub-panel
     tabPanel("Informação", 
              fluidRow(
                column(12,
@@ -354,13 +361,19 @@ ui <- fluidPage(
              )
     ),
     
-    tabPanel("P-SISMA",
+    # build sisma sub-panel
+    tabPanel("SISMA",
              div(id = "processamento-panel",
                  
-                 # Side-by-side panels
+                 # NEW FULL-WIDTH HORIZONTAL PANEL
+                 div(style = "width: 100%; padding: 10px 10px; margin-bottom: 20px; border-radius: 4px;",
+                     p(HTML("<i class='fa fa-info-circle'></i> Contexto"), class = "intro-heading"),
+                     p("O Sistema de Informação de Saúde para Monitoria e Avaliação (melhor conhecido como 'SISMA') é a principal sistema de informação de gestão da saúde do MISAU desenvolvida com base no DHIS2. Esta plataforma é responsável por suportar a recolha, armazenamento, e disseminação da estatística de rotina do Serviço Nacional de Saúde em Moçambique. As ferramentas abaixo permitem aos utilizadores transformar as exportações .csv do SISMA num formato estruturado e de fácil análise, bem como compilar ficheiros processados em ficheiros de dados únicos para utilização em análises fora do SISMA.", class = "intro-text")
+                 ),
+                 
+                 # SIDE-BY-SIDE PANELS
                  div(class = "side-by-side-wrapper",
                      
-                     # Left Panel
                      div(class = "left-panel",
                          div(style = "padding-top: 15px;",
                              p(HTML("<i class='fa fa-broom'></i> Arrumação de Exportações SISMA"), class = "intro-heading"),
@@ -378,10 +391,8 @@ ui <- fluidPage(
                          )
                      ),
                      
-                     # Divider
                      div(class = "divider"),
                      
-                     # Right Panel
                      div(class = "right-panel",
                          div(style = "padding-top: 15px;",
                              p(HTML("<i class='fa fa-layer-group'></i> Compilação de Ficheiros Processados"), class = "intro-heading"),
@@ -399,41 +410,26 @@ ui <- fluidPage(
                      )
                  ),
                  
-                 
                  div(id = "preview-wrapper",
                      style = "display: none; margin-top: 25px;",
-                     
                      uiOutput("preview_header"),
-                     
                      div(id = "preview-container", dataTableOutput("preview")),
                      div(id = "multi-preview-container", dataTableOutput("multi_preview"))
                  )
-                 
              )
     ),
     
-    tabPanel("P-População",
-             div(id = "pop-panel", style = "padding-top: 25px; margin-left: 15px;",
-                 p(HTML("<i class='fa fa-people-group'></i> Arrumação de Projecções Demográficas do INE"), class = "intro-heading"),
-                 p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text"),
-                 fileInput("pop_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx"),
-                 uiOutput("pop_sheet_selector"),
-                 radioButtons("pop_age_level", "Nível de Idade:",
-                              choices = c("Exato" = "Exact", "Agrupado" = "Grouped"),
-                              selected = "Exact", inline = TRUE),
-                 actionButton("process_pop", "Processar", class = "btn btn-primary"),
-                 downloadButton("download_pop", "Descarregar", class = "btn btn-secondary"),
-                 dataTableOutput("pop_preview")
-             )
-    ),
-    
-    tabPanel("P-DISA LAB",
+    # build disa sub-panel
+    tabPanel("DISA LAB",
              div(id = "disa-panel",
                  
-                 # Side-by-side layout
+                 div(style = "width: 100%; padding: 10px 10px; margin-bottom: 20px; border-radius: 4px;",
+                     p(HTML("<i class='fa fa-info-circle'></i> Contexto"), class = "intro-heading"),
+                     p("O DISA é um Sistema de Informação Laboratorial (LIS) que é utilizado para gerir dados laboratoriais - especialmente testes relacionados com o HIV, como carga viral, diagnóstico precoce infantil (EID) e as contagens de CD4 - em toda a rede de laboratórios do país. As ferramentas abaixo permitem aos utilizadores transformar as exportações .csv do OpenLDR (a plataforma que armazena os dados da DISA) num formato estruturado e de fácil análise, bem como compilar ficheiros processados com dados de outros sistemas como o SISMA.", class = "intro-text")
+                 ),
+                 
                  div(class = "side-by-side-wrapper",
                      
-                     # Left Panel
                      div(class = "left-panel",
                          div(style = "padding-top: 15px; margin-left: 5px;",
                              p(HTML("<i class='fa fa-dna'></i> Arrumação de Dados CV (DISA)"), class = "intro-heading"),
@@ -447,10 +443,10 @@ ui <- fluidPage(
                          )
                      ),
                      
-                     # Divider
+
                      div(class = "divider"),
                      
-                     # Right Panel (DPI)
+
                      div(class = "right-panel",
                          div(style = "padding-top: 15px",
                              p(HTML("<i class='fa fa-vials'></i> Arrumação de Dados DPI (DISA)"), class = "intro-heading"),
@@ -470,23 +466,21 @@ ui <- fluidPage(
                              downloadButton("download_dpi", "Descarregar", class = "btn btn-secondary")
                          )
                      )
-                     
                  ),
                  
                  div(
                    id = "preview-wrapper",
                    style = "padding: 10px; background-color: #ffffff; border-top: 1px solid #d9dddc; margin-top: 30px;",
-                   
                    uiOutput("disa_preview_header"),
                    dataTableOutput("disa_preview"),
                    dataTableOutput("dpi_preview")
-                   
                  )
-                 
              )
     ),
     
-    tabPanel("P-LMIS",
+    
+    # build lmis sub-panel
+    tabPanel("LMIS",
              div(id = "lmis-panel", style = "padding-top: 25px; margin-left: 15px;",
                  p(HTML("<i class='fa fa-warehouse'></i> Arrumação de dados da cadeia de abastecimento (CMAM)"), class = "intro-heading"),
                  p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text"),
@@ -502,6 +496,24 @@ ui <- fluidPage(
     ),
     
     
+    # build population sub-panel
+    tabPanel("População",
+             div(id = "pop-panel", style = "padding-top: 25px; margin-left: 15px;",
+                 p(HTML("<i class='fa fa-people-group'></i> Arrumação de Projecções Demográficas (INE)"), class = "intro-heading"),
+                 p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text"),
+                 fileInput("pop_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx"),
+                 uiOutput("pop_sheet_selector"),
+                 radioButtons("pop_age_level", "Nível de Idade:",
+                              choices = c("Exato" = "Exact", "Agrupado" = "Grouped"),
+                              selected = "Exact", inline = TRUE),
+                 actionButton("process_pop", "Processar", class = "btn btn-primary"),
+                 downloadButton("download_pop", "Descarregar", class = "btn btn-secondary"),
+                 dataTableOutput("pop_preview")
+             )
+    ),
+    
+    
+    # build metadata sub-panel
     tabPanel("Metadados",
              fluidRow(
                column(6,
@@ -513,7 +525,8 @@ ui <- fluidPage(
   )
 )
 
-# Server logic
+
+# build server logic
 server <- function(input, output, session) {
   options(shiny.maxRequestSize = 100*1024^2)
   
@@ -797,8 +810,6 @@ server <- function(input, output, session) {
       write_csv(dpi_processed_data(), file)
     }
   )
-  
-  
   
 }
   
