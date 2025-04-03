@@ -334,7 +334,7 @@ ui <- fluidPage(
              fluidRow(
                column(12,
                       style = "padding-top: 25px; margin-left: 15px;",
-                      p(HTML("<i class='fa fa-gears'></i> Automatização de processamento de dados'"), class = "intro-heading"),
+                      p(HTML("<i class='fa fa-gears'></i> Automatização de processamento de dados"), class = "intro-heading"),
                       p("Análise eficiente de dados exportados dos sistemas de informação do Ministério da Saúde (MISAU) normalmente requer acções de processamento como a pivotagem, a eliminação/combinação de variáveis e a engenharia de dimensões úteis para análise. O pacote 'sismar' automatiza essas acções de transformação, facilitando assim a exploração e análise de dados.  Este portal web fornece uma interface visual para aceder às ferramentas do 'sismar' e transformar ficheiros providenciados pelo utilizador.", class = "intro-text"),
                       p(HTML("<i class='fa fa-link'></i> Complementaridade ao SISMA e outros sistemas"), class = "intro-heading"),
                       p("O pacote 'sismar' foi desenvolvido como ferramenta complementar destinada a funcionar no âmbito mais alargado dos sistemas de informação do MISAU. A sua existência confere mais valor aos sistemas de base como o SISMA, fornecendo ferramentas que permitem uma análise mais fácil das estatísticas geradas por esses sistemas. O diagrama abaixo ilustra a relação entre o SISMA e a funcionalidade do pacote 'sismar'.", class = "intro-text")
@@ -350,7 +350,7 @@ ui <- fluidPage(
              ),
              fluidRow(
                column(12,
-                      style = "padding-top: 25px; margin-left: 15px;",
+                      style = "padding-top: 25px; margin-left: 15px; margin-bottom: 20px;",
                       p(HTML("<i class='fa fa-book'></i> Documentação detalhada do 'sismar'"), class = "intro-heading"),
                       p("A documentação completa sobre o “sismar”, incluindo o código-fonte do pacote, pode ser encontrada no ",
                         a("Github", href = "https://github.com/usaid-mozambique/sismar", target = "_blank"),
@@ -366,8 +366,8 @@ ui <- fluidPage(
              div(id = "processamento-panel",
                  
                  # NEW FULL-WIDTH HORIZONTAL PANEL
-                 div(style = "width: 100%; padding: 10px 10px; margin-bottom: 20px; border-radius: 4px;",
-                     p(HTML("<i class='fa fa-info-circle'></i> Contexto"), class = "intro-heading"),
+                 div(style = "width: 100%; padding-top: 25px; margin-left: 15px; margin-bottom: 20px;",
+                     p(HTML("<i class='fa fa-info-circle'></i> Antecedentes do SISMA"), class = "intro-heading"),
                      p("O Sistema de Informação de Saúde para Monitoria e Avaliação (melhor conhecido como 'SISMA') é a principal sistema de informação de gestão da saúde do MISAU desenvolvida com base no DHIS2. Esta plataforma é responsável por suportar a recolha, armazenamento, e disseminação da estatística de rotina do Serviço Nacional de Saúde em Moçambique. As ferramentas abaixo permitem aos utilizadores transformar as exportações .csv do SISMA num formato estruturado e de fácil análise, bem como compilar ficheiros processados em ficheiros de dados únicos para utilização em análises fora do SISMA.", class = "intro-text")
                  ),
                  
@@ -411,7 +411,7 @@ ui <- fluidPage(
                  ),
                  
                  div(id = "preview-wrapper",
-                     style = "display: none; margin-top: 25px;",
+                     style = "display: none; margin-top: 25px; margin-bottom: 25px;",
                      uiOutput("preview_header"),
                      div(id = "preview-container", dataTableOutput("preview")),
                      div(id = "multi-preview-container", dataTableOutput("multi_preview"))
@@ -420,11 +420,11 @@ ui <- fluidPage(
     ),
     
     # build disa sub-panel
-    tabPanel("DISA LAB",
+    tabPanel("DISA",
              div(id = "disa-panel",
                  
-                 div(style = "width: 100%; padding: 10px 10px; margin-bottom: 20px; border-radius: 4px;",
-                     p(HTML("<i class='fa fa-info-circle'></i> Contexto"), class = "intro-heading"),
+                 div(style = "width: 100%; padding-top: 25px; margin-left: 15px; margin-bottom: 20px;",
+                     p(HTML("<i class='fa fa-info-circle'></i> Antecedentes do DISA"), class = "intro-heading"),
                      p("O DISA é um Sistema de Informação Laboratorial (LIS) que é utilizado para gerir dados laboratoriais - especialmente testes relacionados com o HIV, como carga viral, diagnóstico precoce infantil (EID) e as contagens de CD4 - em toda a rede de laboratórios do país. As ferramentas abaixo permitem aos utilizadores transformar as exportações .csv do OpenLDR (a plataforma que armazena os dados da DISA) num formato estruturado e de fácil análise, bem como compilar ficheiros processados com dados de outros sistemas como o SISMA.", class = "intro-text")
                  ),
                  
@@ -435,7 +435,9 @@ ui <- fluidPage(
                              p(HTML("<i class='fa fa-dna'></i> Arrumação de Dados CV (DISA)"), class = "intro-heading"),
                              p("Carregue o ficheiro do sistema DISA (.xlsx) referente ao Carga Viral, defina o mês dos dados exportados de OpenLDR, e descarregue o resultado processado.", class = "intro-text")
                          ),
-                         fileInput("disa_file", "Escolha ficheiro .xlsx", accept = ".xlsx"),
+                         div(style = "margin-top: 25px;",
+                             fileInput("disa_file", "Escolha ficheiro .xlsx", accept = ".xlsx")
+                         ),
                          dateInput("disa_month", "Selecione o mês:", format = "yyyy-mm"),
                          div(class = "btn-container",
                              actionButton("process_disa", "Processar", class = "btn btn-primary"),
@@ -453,7 +455,9 @@ ui <- fluidPage(
                              p("Carregue o ficheiro do sistema DISA (.xlsx) referente ao DPI, defina o mês dos dados e o tipo de estrutura do ficheiro, e descarregue o resultado processado.", class = "intro-text")
                          ),
                          
-                         fileInput("dpi_file", "Escolha ficheiro .xlsx", accept = ".xlsx"),
+                         div(style = "margin-top: 25px;",
+                             fileInput("dpi_file", "Escolha ficheiro .xlsx", accept = ".xlsx")
+                         ),
                          
                          dateInput("dpi_month", "Selecione o mês:", format = "yyyy-mm"),
                          
@@ -470,7 +474,7 @@ ui <- fluidPage(
                  
                  div(
                    id = "preview-wrapper",
-                   style = "padding: 10px; background-color: #ffffff; border-top: 1px solid #d9dddc; margin-top: 30px;",
+                   style = "padding: 10px; background-color: #ffffff; border-top: 1px solid #d9dddc; margin-top: 30px; margin-bottom: 25px;",
                    uiOutput("disa_preview_header"),
                    dataTableOutput("disa_preview"),
                    dataTableOutput("dpi_preview")
@@ -480,11 +484,13 @@ ui <- fluidPage(
     
     
     # build lmis sub-panel
-    tabPanel("LMIS",
-             div(id = "lmis-panel", style = "padding-top: 25px; margin-left: 15px;",
-                 p(HTML("<i class='fa fa-warehouse'></i> Arrumação de dados da cadeia de abastecimento (CMAM)"), class = "intro-heading"),
-                 p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text"),
-                 fileInput("lmis_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx"),
+    tabPanel("nSIMAM",
+             div(id = "lmis-panel", style = "padding-top: 25px; margin-left: 15px; margin-bottom: 25px;",
+                 p(HTML("<i class='fa fa-warehouse'></i> Antecedentes do nSIMAM"), class = "intro-heading"),
+                 p(HTML("O nSIMAM (Sistema de Informação de Medicamentos e Artigos Médicos) é o conceito aplicado ao sistema que suporta a gestão operacional dos Produtos Farmacêuticos e Material Médico-Cirúrgico, abrangendo vários níveis da cadeia de distribuição, desde as Unidades Sanitárias até aos Armazéns Provinciais ou Intermédios. A partir deste sistema, os dados estruturais podem ser exportados e utilizados para monitorizar os níveis de existências de vários produtos no Serviço Nacional de Saúde.  <br><br>A ferramenta abaixo pega numa exportação nSIMAM e devolve o mesmo ficheiro com pequenas alterações estruturais e com identificadores únicos a nível do local utilizados no SISMA.  Isto permite que os dados da cadeia de abastecimento sejam mais facilmente analisados em conjunto com os dados do programa."), class = "intro-text"),
+                 div(style = "margin-top: 25px;",
+                     fileInput("lmis_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx")
+                 ),
                  uiOutput("lmis_sheet_selector"),
                  radioButtons("lmis_age_level", "Nível de Idade:",
                               choices = c("Exato" = "Exact", "Agrupado" = "Grouped"),
@@ -499,9 +505,11 @@ ui <- fluidPage(
     # build population sub-panel
     tabPanel("População",
              div(id = "pop-panel", style = "padding-top: 25px; margin-left: 15px;",
-                 p(HTML("<i class='fa fa-people-group'></i> Arrumação de Projecções Demográficas (INE)"), class = "intro-heading"),
-                 p("Use esta aba para carregar ficheiros populacionais do INE (.xlsx), selecionar os anos/sheets para análise, definir o nível de idade, e descarregar um ficheiro arrumado e consolidado.", class = "intro-text"),
-                 fileInput("pop_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx"),
+                 p(HTML("<i class='fa fa-people-group'></i> Antecedentes das Projecções Demográficas (INE)"), class = "intro-heading"),
+                 p("O Instituto Nacional de Estatística de Moçambique publica projecções demográficas quando novos dados populacionais ficam disponíveis através de actividades periódicas como o Censo nacional ou um Estudo de Agregados Familiares como o Inquérito Demográfico e de Saúde.  Estes ficheiros de projeção são oferecidos a outros Ministérios de Moçambique para ajudar na sua planificação e estimativas de cobertura.  Os ficheiros vêm em 11 ficheiros Excel provinciais separados, cada um contendo um separador para o ano de projeção.  Dentro de cada separador, as tabelas de população distrital incluem idade, sexo e desagregação urbana/rural.  Utilize a ferramenta abaixo para organizar um ou vários destes ficheiros num formato mais facilmente analisável.", class = "intro-text"),
+                 div(style = "margin-top: 25px;",
+                     fileInput("pop_files", "Escolha ficheiros .xlsx", multiple = TRUE, accept = ".xlsx")
+                 ),
                  uiOutput("pop_sheet_selector"),
                  radioButtons("pop_age_level", "Nível de Idade:",
                               choices = c("Exato" = "Exact", "Agrupado" = "Grouped"),
